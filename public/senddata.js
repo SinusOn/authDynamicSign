@@ -1,8 +1,9 @@
 document.querySelector("button").addEventListener("click", (e) => {
   e.preventDefault();
 
-  let firstName = document.querySelector('[name="fname"]');
-  let lastName = document.querySelector('[name="lname"]');
+  let name = document.querySelector('[name="fname"]');
+  let login = document.querySelector('[name="login"]');
+  let password = document.querySelector('[name="pass"]');
 
   let xhr = new XMLHttpRequest();
 
@@ -14,8 +15,16 @@ document.querySelector("button").addEventListener("click", (e) => {
     }
   };
   let data = JSON.stringify({
-    firstName: firstName.value,
-    lastName: lastName.value,
+    name: name.value,
+    login: login.value,
+    password: password.value,
   });
+  xhr.upload.onload = function () {
+    console.log(`Данные успешно отправлены.`);
+  };
+
+  xhr.upload.onloadstart = () => {
+    console.log("start load");
+  };
   xhr.send(data);
 });
