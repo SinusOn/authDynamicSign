@@ -7,7 +7,7 @@ document.querySelector("button").addEventListener("click", (e) => {
 
   let xhr = new XMLHttpRequest();
 
-  xhr.open("POST", "/registration", true);
+  xhr.open("POST", "/auth/registration", true);
   xhr.setRequestHeader("Content-type", "application/json");
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4 && xhr.status === 200) {
