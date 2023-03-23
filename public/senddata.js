@@ -1,30 +1,32 @@
-document.querySelector("button").addEventListener("click", (e) => {
-  e.preventDefault();
+import { coordinates as coord } from "./script.js";
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelector(".regis").addEventListener("click", (e) => {
+    e.preventDefault();
+    const name = document.querySelector('[name="fname"]');
+    const login = document.querySelector('[name="login"]');
+    const password = coord.join(" ");
+    const xhr = new XMLHttpRequest();
 
-  let name = document.querySelector('[name="fname"]');
-  let login = document.querySelector('[name="login"]');
-  let password = document.querySelector('[name="pass"]');
+    xhr.open("POST", "/auth/registration", true);
+    xhr.setRequestHeader("Content-type", "application/json");
 
-  let xhr = new XMLHttpRequest();
+    const data = JSON.stringify({
+      name: name.value,
+      login: login.value,
+      password: password,
+    });
+    xhr.upload.onload = function () {
+      console.log(`Данные успешно отправлены.`);
+    };
 
-  xhr.open("POST", "/auth/registration", true);
-  xhr.setRequestHeader("Content-type", "application/json");
-  xhr.onreadystatechange = () => {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      console.log("Data sended");
-    }
-  };
-  let data = JSON.stringify({
-    name: name.value,
-    login: login.value,
-    password: password.value,
+    xhr.upload.onloadstart = () => {
+      console.log("start load");
+    };
+    xhr.send(data);
   });
-  xhr.upload.onload = function () {
-    console.log(`Данные успешно отправлены.`);
-  };
 
-  xhr.upload.onloadstart = () => {
-    console.log("start load");
-  };
-  xhr.send(data);
+  let xhr2 = new XMLHttpRequest();
+  xhr2.open("GET", "/auth/users", true);
+  xhr2.setRequestHeader("Authorization", "Bearer hdjksksk");
+  xhr2.send();
 });
