@@ -1,0 +1,36 @@
+.formreg {
+  background-color: rgb(255, 255, 255);
+  min-width: 300px;
+  width: 30%;
+  margin: 40px auto 20px auto;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
+  box-shadow: 2px 2px 5px rgb(128, 128, 128);
+  border-radius: 5px;
+}
+
+input {
+  display: block;
+  margin: auto;
+  margin-bottom: 15px;
+}
+button {
+  display: block;
+  margin: 15px auto;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: rgb(136, 100, 179);
+  border-color: transparent;
+  box-shadow: 2px 2px 5px rgb(128, 128, 128);
+
+  color: white;
+}
+.log {
+  display: flex;
+  margin: 0 auto 0 auto;
+  width: 70%;
+  justify-content: space-between;
+}
