@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
+import { Route, BrowserRouter } from "react-router-dom";
 import Form from "./components/Form";
-import Canvas from "./components/Canvas";
+
 import "./styles/App.css";
 
 function App() {
+  const [isAuth, setIsAuth] = useState(false);
   return (
-    <div className="app">
-      <Form />
-      <Canvas />
-    </div>
+    <BrowserRouter>
+      <Route path="auth">
+        <Form setIsAuth={setIsAuth} />
+      </Route>
+      <Route path="user">
+        <div>USER HELLO 6</div>
+      </Route>
+    </BrowserRouter>
   );
 }
 
