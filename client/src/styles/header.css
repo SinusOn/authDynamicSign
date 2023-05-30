@@ -1,0 +1,5 @@
+header {
+  display: block;
+  position: fixed;
+  border-bottom: 1px solid green;
+}

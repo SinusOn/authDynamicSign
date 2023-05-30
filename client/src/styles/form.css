@@ -34,3 +34,8 @@ button {
   width: 70%;
   justify-content: space-between;
 }
+img {
+  position: relative;
+  left: 110px;
+  cursor: pointer;
+}
