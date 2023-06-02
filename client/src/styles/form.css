@@ -18,13 +18,14 @@ input {
 button {
   display: block;
   margin: 15px auto;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border-radius: 5px;
+
+  padding: 5px 5px;
+  border-radius: 7px;
   cursor: pointer;
-  background-color: rgb(136, 100, 179);
+
+  background: rgb(155, 139, 175);
   border-color: transparent;
-  box-shadow: 2px 2px 5px rgb(128, 128, 128);
+  box-shadow: 1px 1px 3px rgb(128, 128, 128);
 
   color: white;
 }

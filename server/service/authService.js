@@ -3,8 +3,10 @@ import Role from "../models/Role.js";
 import tokenService from "./tokenService.js";
 import cryptService from "./cryptService.js";
 import dtwService from "./dtwService.js";
+import Token from "../models/Token.js";
 class AuthService {
   async registration(name, login, password) {
+    password = password.join(" ");
     const foundUser = await User.findOne({ login });
     if (foundUser) {
       throw new Error("Пользователь с таким логином уже зарегистрирован");
@@ -19,8 +21,12 @@ class AuthService {
       role: userRole,
     });
     const { id } = user;
+    console.log(id);
+
     const tokens = await tokenService.generateToken({ id });
-    await tokenService.saveSignToken(tokens.refreshToken, id);
+    console.log("после генерацции рефреш --" + tokens.refreshToken);
+    console.log(tokens + "test");
+    await tokenService.saveRefreshToken(tokens.refreshToken, id);
     return tokens;
   }
 
@@ -51,7 +57,37 @@ class AuthService {
 
   async logout() {}
 
-  async refresh() {}
+  async refresh(refreshToken) {
+    console.log(`рефреш в ауз сервисе ${refreshToken}`);
+    if (!refreshToken) {
+      throw new Error("Не авторизован, нет токена");
+    }
+    const userData = await tokenService.validateRefreshToken(refreshToken);
+    const foundToken = await tokenService.findToken(refreshToken);
+    console.log(`userData - ${userData.userId}`);
+    console.log(`foundToken - ${foundToken}`);
+    // if (!userData || !foundToken) {
+    //   throw new Error("Не авторизован");
+    // }
+    const user = await User.findById(userData.id);
+    console.log(userData.id);
+    const { id } = user;
+    const tokens = await tokenService.generateToken({ id });
+    // await tokenService.saveRefreshToken(refreshToken, id);
+    // const tokenData = await Token.findOne({ userId });
+    // console.log("как выглядит токендата ---" + tokenData);
+    // if (tokenData) {
+    //   console.log("должен быть измененный токен" + token);
+    //   tokenData.refreshToken = token;
+    //   console.log("как выглядит токендата потом ---" + tokenData);
+    //   return tokenData.save();
+    // }
+    foundToken.refreshToken = tokens.refreshToken;
+    foundToken.save();
+    console.log("изменненый рефреш " + tokens.refreshToken);
+    console.log("изменненый access " + tokens.accessToken);
+    return tokens;
+  }
 }
 
 export default new AuthService();

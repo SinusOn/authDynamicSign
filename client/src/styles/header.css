@@ -1,5 +1,20 @@
+Body {
+  margin: 0;
+  box-sizing: border-box;
+}
 header {
   display: block;
-  position: fixed;
-  border-bottom: 1px solid green;
+  width: 80%;
+  margin: 0 auto 0 auto;
+  padding: 10px 0;
+  color: aliceblue;
+  font-size: 20px;
+}
+.wrap_head {
+  position: sticky;
+  top: 0;
+  display: block;
+  width: 100%;
+  background-color: rgb(155, 139, 175);
+  box-shadow: 0 1px 8px 1px rgba(57, 55, 55, 0.5);
 }

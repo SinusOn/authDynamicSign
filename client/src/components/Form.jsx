@@ -1,17 +1,14 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {  useEffect, useRef, useState } from "react";
 import {useNavigate} from 'react-router-dom'
-import '../styles/form.css'
-import '../styles/canvas.css'
-
 import { observer } from "mobx-react-lite";
 import canvasState from '../store/canvasState.js'
 import drawState from "../store/drawState";
 import Draw from "../draw/Draw";
 import coordinatesState from "../store/coordinatesState";
-import Requests from "../api/Requests";
-
-
-
+import '../styles/form.css'
+import '../styles/canvas.css'
+import Requests from '../api/Requests.js'
+import AuthState from '../store/authState'
 const Form = observer((props) => {
 
   const canvasRef = useRef()
@@ -35,9 +32,9 @@ const Form = observer((props) => {
  
   }, [status])
 
-  function showPas() {
-    console.log(coordinatesState.coordinates)
-  }
+  // function fakeLogin(name, login, password) {
+    
+  // }
 
   
 
@@ -45,8 +42,12 @@ const Form = observer((props) => {
     
       <div className="formreg">
 
-<button onClick={() => console.log(props.isAuth)}>
-      Какой статус авторизации
+<button onClick={() => {
+  console.log(props.isAuth+ " auth ")
+  console.log(props.accessToken+ " token")
+
+}}>
+      Какой статус авторизации и какое токен доступа ff
     </button>
   
       {
@@ -60,13 +61,27 @@ const Form = observer((props) => {
    
        
         {
-                    (reqType === "login") ? <button onClick={ () =>  {
-                        props.setIsAuth(true)
-                      console.log('должно быть тру')
-                      navigate('/user')
-                    }}>Войти</button> : <button>Зарегистрироваться</button>
+                    (reqType === "login") ? <button onClick={async () => {
+                      const res = await Requests.login(userName, login, coordinatesState.coordinates, props.setIsAuth, props.setAccessToken)
+                    
+                      props.setIsAuth(true);
+                      props.setAccessToken(res)
+                     
+                    }}>Войти</button> : 
+                    <button onClick={async () => {
+                      const token = await Requests.registration(userName, login, coordinatesState.coordinates);
+                      console.log('toooken ' + token)
+                      props.setIsAuth(true)
+                      console.log(props.isAuth + " is auth")
+                      props.setAccessToken(token);
+                      console.log('acc t' + props.accessToken)
+                     
+                console.log(props)
+                    }}>Продолжить</button>
           // (reqType === "login") ? <button onClick={() => {Requests.login('alina', 'panova', 'pass', props.isAuth, props.setIsAuth)}}>Войти</button> : <button>Зарегистрироваться</button>
+          
         }
+        
       
         
         </> : <>    <input type="text" name="fname" placeholder="Имя" onChange={e => setName(e.target.value)}/>

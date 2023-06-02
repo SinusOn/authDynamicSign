@@ -5,11 +5,11 @@ export default function aut(req, res, next) {
     const accessToken = req.cookies.accessToken;
     if (!accessToken) {
       // console.log("error auth");
-      return res.status(400).json("not auth");
+      return res.status(401).json("not auth");
     }
     const userData = tokenService.validateAccessToken(accessToken);
     if (!userData) {
-      return res.status(400).json("not auth");
+      return res.status(401).json("not auth");
     }
     req.user = userData;
     next();
