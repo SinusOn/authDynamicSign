@@ -1,7 +1,8 @@
 class dtwService {
   CompareDynamocSign(ref, inp) {
     const reference = ref.split(" ");
-    const input = inp.split(" ");
+    // const input = inp.split(" ");
+    const input = inp;
     console.log(`refer ${reference}`);
     console.log(`-------`);
     console.log(`input ${input}`);

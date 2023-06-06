@@ -21,7 +21,7 @@ button {
 
   padding: 5px 5px;
   border-radius: 7px;
-  cursor: pointer;
+  cursor: pointer !important;
 
   background: rgb(155, 139, 175);
   border-color: transparent;
@@ -38,5 +38,5 @@ button {
 img {
   position: relative;
   left: 110px;
-  cursor: pointer;
+  cursor: pointer !important;
 }

@@ -11,22 +11,10 @@ export default class AuthService {
     return api.post("/logout");
   }
   static async getUser() {
-    console.log("started get users");
     return api.get("/user");
   }
-  static async fakeLogin(name, login, password) {
-    return api.post("/fakelogin", { name, login, password });
-  }
-  static async fakeRegistration(name, login, password) {
-    return api.post("/fakeregis", { name, login, password });
-  }
-  static clearCookie() {
-    return api.post("/clearcookie");
-  }
+
   static async refresh() {
     return api.get("/refresh");
-  }
-  static user() {
-    return api.get("/user");
   }
 }

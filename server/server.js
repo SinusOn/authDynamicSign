@@ -5,12 +5,13 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import cors from "cors";
+// import errorMiddleware from "./errorMiddleWare.js";
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT;
 const DBURL = process.env.DBURL;
-app.set("view engine", "ejs");
+
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(
@@ -19,13 +20,11 @@ app.use(
     origin: "http://localhost:3000",
   })
 );
-
-app.use(express.static(`public`));
-// app.use("/auth", router);
 app.use("/", router);
-app.get("/", (req, res) => {
-  res.render(`index`);
-});
+// app.use(errorMiddleware);
+// app.get("/", (req, res) => {
+//   res.render(`index`);
+// });
 async function startApp() {
   try {
     await mongoose.connect(DBURL);
@@ -35,8 +34,3 @@ async function startApp() {
   }
 }
 startApp();
-
-// app.get("/clear", (req, res) => {
-//   res.clearCookie("myTestcookie");
-//   res.send("cleared");
-// });

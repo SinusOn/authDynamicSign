@@ -2,43 +2,33 @@ import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Form from "./components/Form";
 import User from "./components/User";
-
 import Header from "./components/Header";
 import "./styles/App.css";
 import AuthService from "./services/AuthService";
 import ErrorPage from "./pages/ErrorPage";
 import Cookie from "js-cookie";
-import Requests from "./api/Requests";
-import AuthState from "./store/authState";
+
 function App() {
   const [isAuth, setIsAuth] = useState(false);
-  const [accessToken, setAccessToken] = useState("");
-  // async function checkAuth() {
-  //   try {
-  //     const response = await AuthService.checkAuth();
-  //     setIsAuth(true);
-  //   } catch (error) {
-  //     console.log("error auth check");
-  //   }
-  // }
-  async function checkAuth(accessToken, setAccessToken) {
-    try {
-      const response = await AuthService.refresh();
-      const { accessToken } = response.data;
-      console.log(accessToken + " from APPP");
-      setIsAuth(true);
-      return accessToken;
-    } catch (error) {
-      console.log("error auth ");
-    }
-  }
-  useEffect(() => {
-    if (Cookie.get("accessToken")) {
-      checkAuth(setIsAuth, setIsAuth);
+  const [loading, setLoading] = useState(true);
+  const cookieToken = Cookie.get("accessToken");
 
-      console.log("check work");
+  useEffect(() => {
+    console.log("cook token " + cookieToken);
+    if (cookieToken) {
+      AuthService.refresh()
+        .then(() => {
+          setIsAuth(true);
+          setLoading(false);
+        })
+        .catch(() => {
+          setLoading(false);
+        });
+      return;
     }
-  }, [accessToken]);
+
+    setLoading(false);
+  }, [cookieToken]);
 
   return (
     <div>
@@ -48,14 +38,19 @@ function App() {
           element={
             <>
               <Header />
-              {isAuth ? (
-                <User isAuth={isAuth} accessToken={accessToken} />
+              {loading ? (
+                <h1>Загрузка</h1>
+              ) : isAuth ? (
+                <User
+                  isAuth={isAuth}
+                  setIsAuth={setIsAuth}
+                  setLoading={setLoading}
+                />
               ) : (
                 <Form
                   isAuth={isAuth}
                   setIsAuth={setIsAuth}
-                  accessToken={accessToken}
-                  setAccessToken={setAccessToken}
+                  setLoading={setLoading}
                 />
               )}
             </>

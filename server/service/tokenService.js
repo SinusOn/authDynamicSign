@@ -32,11 +32,10 @@ class TokenService {
   }
   async saveRefreshToken(token, userId) {
     const tokenData = await Token.findOne({ userId });
-    console.log("как выглядит токендата ---" + tokenData);
+
     if (tokenData) {
-      console.log("должен быть измененный токен" + token);
       tokenData.refreshToken = token;
-      console.log("как выглядит токендата потом ---" + tokenData);
+
       return tokenData.save();
     }
     const retToken = await Token.create({
@@ -47,9 +46,12 @@ class TokenService {
   }
   async findToken(token) {
     const foundToken = await Token.findOne({ refreshToken: token });
-    console.log("рефреш в токенсервис " + token);
-    console.log(foundToken + "найден токен серсив");
+
     return foundToken;
+  }
+  async deleteToken(refreshToken) {
+    await Token.deleteOne({ refreshToken });
+    return;
   }
 }
 

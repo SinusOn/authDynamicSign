@@ -7,57 +7,57 @@ class authController {
     try {
       const { name, login, password } = req.body;
       const tokens = await authService.registration(name, login, password);
-      console.log(tokens);
       res.cookie("refreshToken", tokens.refreshToken, {
-        maxAge: 3600 * 1000,
+        maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       });
       res.cookie("accessToken", tokens.accessToken, {
-        maxAge: 30 * 24 * 60 * 60 * 1000,
+        maxAge: 3600 * 1000,
       });
-
-      res.json(tokens);
+      res.json(name);
     } catch (error) {
-      console.log(error);
-      res.status(400);
+      res.status(401).json(error.message);
     }
   }
 
   async login(req, res) {
     try {
       const { name, login, password } = req.body;
-      // const tokens = await authService.login(name, login, password);
-      // console.log("Авторизован");
-      console.log(req.body);
+      const tokens = await authService.login(name, login, password);
 
-      // res.cookie("refreshToken", tokens.refreshToken, {
-      //   httpOnly: true,
-      // });
-      // res.cookie("accessToken", tokens.accessToken, {
-      //   httpOnly: true,
-      // });
+      res.cookie("refreshToken", tokens.refreshToken, {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
+      res.cookie("accessToken", tokens.accessToken, {
+        maxAge: 3600 * 1000,
+      });
 
       res.status(200);
       res.json(tokens);
     } catch (error) {
-      console.log(error);
+      res.status(400).json(error.message);
     }
   }
   async refresh(req, res) {
     try {
       const { refreshToken } = req.cookies;
-      console.log(`рефреш в контроллере ${refreshToken}`);
+      if (!refreshToken) {
+        res.json("ok");
+      }
+
       const tokens = await authService.refresh(refreshToken);
       res.cookie("refreshToken", tokens.refreshToken, {
-        maxAge: 3600 * 1000,
+        maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       });
       res.cookie("accessToken", tokens.accessToken, {
-        maxAge: 30 * 24 * 60 * 60 * 1000,
+        maxAge: 3600 * 1000,
       });
       res.json(tokens);
+      return;
     } catch (error) {
-      console.log(error);
+      res.status(401);
     }
   }
   async users(req, res) {
@@ -67,15 +67,25 @@ class authController {
         user: "ALina user",
       });
     } catch (error) {
-      console.log(error);
+      res.status(401).json(error.message);
     }
   }
+  async logout(req, res) {
+    try {
+      const { refreshToken } = req.cookies;
 
-  async fakeLogin(req, res) {
-    const { name, login, password } = req.body;
-    const userFake = await authService.fakeLogin(name, login, password);
-    console.log(userFake);
-    res.json(userFake);
+      await authService.logout(refreshToken);
+
+      res.clearCookie("refreshToken");
+      res.clearCookie("accessToken");
+      return res.json("logout end");
+    } catch (error) {
+      res.status(400).json(error.message);
+    }
+  }
+  async user(req, res) {
+    try {
+    } catch (error) {}
   }
 }
 export default new authController();
