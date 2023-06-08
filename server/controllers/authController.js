@@ -14,7 +14,7 @@ class authController {
       res.cookie("accessToken", tokens.accessToken, {
         maxAge: 3600 * 1000,
       });
-      res.json(name);
+      res.json({ name, login });
     } catch (error) {
       res.status(401).json(error.message);
     }
@@ -86,6 +86,35 @@ class authController {
   async user(req, res) {
     try {
     } catch (error) {}
+  }
+  async compareSign(req, res) {
+    try {
+      const { reference, input } = req.body;
+      const similarity = await authService.compareSign(reference, input);
+
+      res.status(200).json({ mess: "подписи похожи" });
+    } catch (error) {
+      res.status(400).json(error.message);
+    }
+  }
+  async changePass(req, res) {
+    try {
+      const { name, login, password } = req.body;
+
+      const tokens = await authService.changePass(name, login, password);
+
+      res.cookie("refreshToken", tokens.refreshToken, {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
+      res.cookie("accessToken", tokens.accessToken, {
+        maxAge: 3600 * 1000,
+      });
+
+      res.status(200).json({ name, login });
+    } catch (error) {
+      res.status(400).json(error.message);
+    }
   }
 }
 export default new authController();

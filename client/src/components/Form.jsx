@@ -20,7 +20,8 @@ const Form = observer((props) => {
 
   const [status, setSTatus] = useState(false)
   const [reqType, setReqType] = useState('');
-
+  const [continTime, setContinTime] = useState(0);
+  const [referenceSing, setRefSign] = useState([])
 
 
   useEffect(() => {
@@ -31,8 +32,7 @@ const Form = observer((props) => {
     }
  
   }, [status])
-
-
+  
     return (
     
       <div className="formreg">
@@ -56,15 +56,35 @@ const Form = observer((props) => {
            btnClearRef.current.click()
          
           }}>Войти</button> : 
-                    <button onClick={async () => {    
+                    <button onClick={async () => {
                       if (!userName || !login || !coordinatesState.coordinates) {
                         alert('Заполните все поля формы')
                         return
-                      }
-                  
-                      Requests.registration(userName, login, coordinatesState.coordinates, props.setIsAuth);
-                      btnClearRef.current.click()
- 
+                        }
+                   
+                        if (continTime === 0) {
+                          setRefSign(coordinatesState.coordinates);
+                          alert('Распишитесь еще 2 раза для корректной обработки вашей подписи')
+                          btnClearRef.current.click()
+                        }
+                        if (continTime === 1) {
+                          
+                          const response =  Requests.compareSign(referenceSing, coordinatesState.coordinates, setContinTime)
+                          console.log(response)
+                          btnClearRef.current.click()
+                          // alert('Распишитесь еще раз')
+                        }
+                        if (continTime === 2) {
+                     
+                          const response =  Requests.compareSign(referenceSing, coordinatesState.coordinates, setContinTime)
+                          btnClearRef.current.click()
+                          if (response) {
+                             Requests.registration(userName, login, referenceSing, props.setIsAuth);
+                          }
+                          
+                        }
+                       
+                        setContinTime(continTime + 1);
                     }}>Продолжить</button>
     
         }

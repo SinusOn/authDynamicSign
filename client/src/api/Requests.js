@@ -1,6 +1,6 @@
 import setIsAuth from "../App";
 import AuthService from "../services/AuthService.js";
-import { Navigate } from "react-router-dom";
+
 class Requests {
   async registration(name, login, password, setIsAuth) {
     try {
@@ -8,9 +8,8 @@ class Requests {
 
       setIsAuth(true);
       localStorage.setItem("user name", name);
+      localStorage.setItem("user login", name);
     } catch (error) {
-      // console.log(error.response?.data?.message);
-      console.log(error.response.data);
       alert(error.response.data);
       setIsAuth(false);
     }
@@ -45,6 +44,25 @@ class Requests {
     try {
     } catch (error) {
       console.log(error);
+    }
+  }
+  async compareSign(reference, input, setContinTime) {
+    try {
+      await AuthService.compareSign(reference, input);
+      return true;
+    } catch (error) {
+      alert(error.response.data);
+      setContinTime(0);
+      return false;
+    }
+  }
+  async changePass(name, login, password, setIsAuth) {
+    try {
+      const response = await AuthService.changePass(name, login, password);
+      setIsAuth(true);
+      return true;
+    } catch (error) {
+      alert("Не удалось обновить пароль");
     }
   }
 }

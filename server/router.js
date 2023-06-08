@@ -9,8 +9,8 @@ router.get("/users", auth, authController.users);
 router.get("/user", auth, authController.user);
 router.post("/login", authController.login);
 router.post("/logout", authController.logout);
-
+router.post("/comparesign", authController.compareSign);
+router.get("/refresh", authController.refresh);
+router.post("/changepass", authController.changePass);
 export default router;
 // router.post("/coord", authController.postCoord);
-
-router.get("/refresh", authController.refresh);

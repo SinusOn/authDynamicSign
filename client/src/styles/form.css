@@ -35,8 +35,43 @@ button {
   width: 70%;
   justify-content: space-between;
 }
-img {
+.clear {
   position: relative;
   left: 110px;
   cursor: pointer !important;
+}
+.profile img {
+  width: 70px;
+  height: 70px;
+  cursor: auto !important;
+  margin-right: 30px;
+  text-align: center;
+}
+.profile {
+  margin-left: 40px;
+  display: flex;
+  width: 50%;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 25px;
+  margin-top: 50px;
+  margin-bottom: 40px;
+}
+.wrap_profile {
+  width: 45%;
+  margin: 30px auto;
+  background-color: aliceblue;
+  padding-top: 10px;
+  padding-bottom: 30px;
+  border-radius: 3px;
+  box-shadow: 2px 2px 5px rgb(189, 189, 189);
+}
+
+.profile_btn {
+  display: flex;
+  justify-content: flex-end;
+}
+.profile_btn button {
+  margin: 0;
+  margin-right: 25px;
 }

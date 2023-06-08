@@ -72,6 +72,30 @@ class AuthService {
 
     return tokens;
   }
+  async compareSign(reference, input) {
+    const similarity = await dtwService.CompareDynamocSign(
+      reference.join(" "),
+      input
+    );
+    if (similarity) return similarity;
+    throw new Error("Подписи не похожи, попробуйте еще раз");
+  }
+  async changePass(name, login, password) {
+    password = password.join(" ");
+    const encryptedPassword = cryptService.encrypt(password, process.env.KEYDB);
+    const foundUser = await User.findOne({ login });
+    const changedUser = await User.updateOne(
+      { login: login },
+      { $set: { password: encryptedPassword } }
+    );
+    if (changedUser.modifiedCount === 0) {
+      throw new Error("Не удалось обновить подпись");
+    }
+    const { id } = foundUser;
+    const tokens = await tokenService.generateToken({ id });
+    await tokenService.saveRefreshToken(tokens.refreshToken, id);
+    return tokens;
+  }
 }
 
 export default new AuthService();

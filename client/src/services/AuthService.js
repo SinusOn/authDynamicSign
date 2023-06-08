@@ -17,4 +17,10 @@ export default class AuthService {
   static async refresh() {
     return api.get("/refresh");
   }
+  static async compareSign(reference, input) {
+    return api.post("/comparesign", { reference, input });
+  }
+  static async changePass(name, login, password) {
+    return api.post("/changepass", { name, login, password });
+  }
 }

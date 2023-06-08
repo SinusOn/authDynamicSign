@@ -3,6 +3,7 @@ canvas {
   border: 2px solid rgb(52, 75, 59);
   margin: 30px auto 20px auto;
   margin-top: 0;
+  background-color: white;
 }
 /* .f {
   display: block;
