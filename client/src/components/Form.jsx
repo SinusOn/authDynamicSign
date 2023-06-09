@@ -36,6 +36,7 @@ const Form = observer((props) => {
     return (
     
       <div className="formreg">
+        <h1>TEST</h1>
 
       {
         status ? <>
