@@ -23,4 +23,10 @@ export default class AuthService {
   static async changePass(name, login, password) {
     return api.post("/changepass", { name, login, password });
   }
+  static async getAllUsers() {
+    return api.get("/users");
+  }
+  static async getRole() {
+    return api.get("/getrole");
+  }
 }

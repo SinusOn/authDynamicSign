@@ -2,22 +2,39 @@ import setIsAuth from "../App";
 import AuthService from "../services/AuthService.js";
 
 class Requests {
-  async registration(name, login, password, setIsAuth) {
+  async registration(name, login, password, setIsAuth, setAdmin) {
     try {
       const response = await AuthService.registration(name, login, password);
-
+      if (response.data.role === "Admin") {
+        setAdmin(true);
+      }
       setIsAuth(true);
       localStorage.setItem("user name", name);
-      localStorage.setItem("user login", name);
+      localStorage.setItem("user login", login);
+      console.log("ответ в Requests");
+      console.log(response);
+      return response;
     } catch (error) {
       alert(error.response.data);
+      console.log("бля ы ошибка ");
+      console.log(error);
+      console.log(error.response.data);
       setIsAuth(false);
     }
   }
-  async login(name, login, password, setIsAuth, setSTatus) {
+  async login(name, login, password, setIsAuth, setSTatus, setAdmin) {
     try {
       const response = await AuthService.login(name, login, password);
+      console.log(
+        response + " Ответ в реквестах на клиенте после лоигна внизу"
+      );
+      console.log(response);
+      localStorage.setItem("user name", name);
+      localStorage.setItem("user login", login);
       console.log(response.data);
+      if (response.data.role === "Admin") {
+        setAdmin(true);
+      }
       setIsAuth(true);
     } catch (error) {
       console.log(error.response.data);
@@ -26,10 +43,15 @@ class Requests {
       setSTatus(false);
     }
   }
-  getUsers() {
-    console.log("Us work");
-    const response = AuthService.getUser();
-    return response;
+  async getAllUsers() {
+    try {
+      console.log("Us work");
+      const response = AuthService.getAllUsers();
+      return response;
+    } catch (error) {
+      alert("error ы бля");
+      alert(error);
+    }
   }
 
   async checkAuth() {
@@ -42,6 +64,8 @@ class Requests {
   }
   logout() {
     try {
+      localStorage.removeItem("user name");
+      localStorage.removeItem("user login");
     } catch (error) {
       console.log(error);
     }

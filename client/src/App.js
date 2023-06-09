@@ -10,15 +10,19 @@ import Cookie from "js-cookie";
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
+  const [isAdmin, setAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const cookieToken = Cookie.get("accessToken");
 
   useEffect(() => {
-    console.log("cook token " + cookieToken);
     if (cookieToken) {
       AuthService.refresh()
-        .then(() => {
+        .then((userData) => {
           setIsAuth(true);
+
+          if (userData.data.role === "Admin") {
+            setAdmin(true);
+          }
           setLoading(false);
         })
         .catch(() => {
@@ -45,12 +49,14 @@ function App() {
                   isAuth={isAuth}
                   setIsAuth={setIsAuth}
                   setLoading={setLoading}
+                  isAdmin={isAdmin}
                 />
               ) : (
                 <Form
                   isAuth={isAuth}
                   setIsAuth={setIsAuth}
                   setLoading={setLoading}
+                  setAdmin={setAdmin}
                 />
               )}
             </>

@@ -36,11 +36,14 @@ const Form = observer((props) => {
     return (
     
       <div className="formreg">
-        <h1>TEST</h1>
+        
 
       {
         status ? <>
-        <button onClick={() => setSTatus(false)}>Назад</button>
+        <button onClick={() => {
+          setSTatus(false)
+          btnClearRef.current.click()
+        }}>Назад</button>
         <div className="wrapCanvas"> 
         <img src="/clearCanvas.png" className="clear" ref={btnClearRef} width={20} height={20} alt="" />
         <canvas ref={canvasRef} width={250} height={250}></canvas>
@@ -53,7 +56,7 @@ const Form = observer((props) => {
               alert('Заполните все поля формы')
               return
             }
-           Requests.login(userName, login, coordinatesState.coordinates, props.setIsAuth, setSTatus);
+           Requests.login(userName, login, coordinatesState.coordinates, props.setIsAuth, setSTatus, props.setAdmin);
            btnClearRef.current.click()
          
           }}>Войти</button> : 
@@ -70,18 +73,26 @@ const Form = observer((props) => {
                         }
                         if (continTime === 1) {
                           
-                          const response =  Requests.compareSign(referenceSing, coordinatesState.coordinates, setContinTime)
-                          console.log(response)
+                           Requests.compareSign(referenceSing, coordinatesState.coordinates, setContinTime)
+                         
                           btnClearRef.current.click()
                           // alert('Распишитесь еще раз')
                         }
                         if (continTime === 2) {
                      
-                          const response =  Requests.compareSign(referenceSing, coordinatesState.coordinates, setContinTime)
+                          // const response =  Requests.compareSign(referenceSing, coordinatesState.coordinates, setContinTime)
+                          Requests.compareSign(referenceSing, coordinatesState.coordinates, setContinTime).then((result) => {
+                            console.log('респонс в форм , после сравнения ---внизу')
+                            console.log(result)
+                            if (result) {
+                              Requests.registration(userName, login, referenceSing, props.setIsAuth, props.setAdmin);
+                              return
+                           }
+                           props.setIsAuth(false)
+                          })
+                         
                           btnClearRef.current.click()
-                          if (response) {
-                             Requests.registration(userName, login, referenceSing, props.setIsAuth);
-                          }
+                       
                           
                         }
                        

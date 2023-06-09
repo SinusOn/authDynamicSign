@@ -13,6 +13,7 @@ const User = observer((props) => {
   const btnClearRef = useRef();
   const [continTime, setContinTime] = useState(0);
   const [referenceSing, setRefSign] = useState([])
+  
   useEffect(() => {
 
     if (changePass) {
@@ -79,6 +80,14 @@ const User = observer((props) => {
       props.setLoading(false);
       }}>Выйти</button>
       <button onClick={() => setChangePass(true)}>Сменить пароль</button>
+
+      {props.isAdmin ? <>
+        <button onClick={() => {
+        Requests.getAllUsers().then((result) => {
+          console.log(result)
+        })
+      }}>Получить список пользователей</button>
+      </>: <></>}
 
       </div>
       <div className="profile">
