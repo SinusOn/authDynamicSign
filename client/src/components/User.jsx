@@ -84,7 +84,7 @@ const User = observer((props) => {
       {props.isAdmin ? <>
         <button onClick={() => {
         Requests.getAllUsers().then((result) => {
-          console.log(result)
+          console.log(result.data)
         })
       }}>Получить список пользователей</button>
       </>: <></>}
