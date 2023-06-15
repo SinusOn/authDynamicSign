@@ -64,38 +64,27 @@ const Form = observer((props) => {
                       if (!userName || !login || !coordinatesState.coordinates) {
                         alert('Заполните все поля формы')
                         return
-                        }
-                   
+                        }               
                         if (continTime === 0) {
                           setRefSign(coordinatesState.coordinates);
                           alert('Распишитесь еще 2 раза для корректной обработки вашей подписи')
                           btnClearRef.current.click()
                         }
-                        if (continTime === 1) {
-                          
+                        if (continTime === 1) {                
                            Requests.compareSign(referenceSing, coordinatesState.coordinates, setContinTime)
-                         
-                          btnClearRef.current.click()
-                          // alert('Распишитесь еще раз')
+                          btnClearRef.current.click()                    
                         }
-                        if (continTime === 2) {
-                     
-                          // const response =  Requests.compareSign(referenceSing, coordinatesState.coordinates, setContinTime)
+                        if (continTime === 2) {     
                           Requests.compareSign(referenceSing, coordinatesState.coordinates, setContinTime).then((result) => {
-                            console.log('респонс в форм , после сравнения ---внизу')
-                            console.log(result)
+                  
                             if (result) {
                               Requests.registration(userName, login, referenceSing, props.setIsAuth, props.setAdmin);
                               return
                            }
                            props.setIsAuth(false)
-                          })
-                         
-                          btnClearRef.current.click()
-                       
-                          
+                          }) 
+                          btnClearRef.current.click()    
                         }
-                       
                         setContinTime(continTime + 1);
                     }}>Продолжить</button>
     

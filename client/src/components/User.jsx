@@ -48,7 +48,7 @@ const User = observer((props) => {
               const response =  Requests.compareSign(referenceSing, coordinatesState.coordinates, setContinTime)
               console.log(response)
               btnClearRef.current.click()
-              // alert('Распишитесь еще раз')
+              
             }
             if (continTime === 2) {
          
@@ -69,8 +69,7 @@ const User = observer((props) => {
     </>:<>
       
     {props.isAuth ? <>
-        {/* <h1>{localStorage.getItem('user name')}</h1>
-      <img src="/profile.png" className="profile"/> */}
+     
       <div className="wrap_profile">
       <div className="profile_btn">
       <button onClick={ async () => {

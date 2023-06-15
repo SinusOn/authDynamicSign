@@ -1,28 +1,45 @@
 class dtwService {
-  CompareDynamocSign(ref, inp) {
+  CompareDynamocSign(ref, input) {
     const reference = ref.split(" ");
-    // const input = inp.split(" ");
-    const input = inp;
-    console.log(`refer ${reference}`);
-    console.log(`-------`);
-    console.log(`input ${input}`);
-    const W = [];
-    const n = reference.length,
-      m = input.length;
+    const warpingPath = [];
+    const n = reference.length;
+    const m = input.length;
     const matrixDistance = [];
+
     // рассчет матрицы расстояний
+
+    this.calculateDistanceMatrix(matrixDistance, reference, input, n, m);
+
+    // рассчет матрицы деформации
+    const matrixDeformation = [];
+    matrixDeformation[0] = [];
+    matrixDeformation[0][0] = matrixDistance[0][0];
+    this.calculateMatrixDeformation(matrixDeformation, matrixDistance, n, m);
+
+    // поиск оптимального пути
+
+    this.searchWarpingPath(warpingPath, matrixDeformation, n, m);
+    const distanceDWT =
+      Math.sqrt(warpingPath.reduce((sum, item) => sum + item)) /
+      warpingPath.length;
+    console.log("расстояние DWT");
+    console.log(distanceDWT);
+    console.log("последняя координата");
+    console.log(matrixDeformation[n - 1][m - 1]);
+    if (distanceDWT >= 1) return false;
+    return true;
+  }
+
+  calculateDistanceMatrix(matrixDistance, reference, input, n, m) {
     for (let i = 0; i < n; i++) {
       matrixDistance[i] = [];
       for (let j = 0; j < m; j++) {
         matrixDistance[i][j] = Math.abs(reference[i] - input[j]);
       }
     }
+  }
 
-    // рассчет матрицы деформации
-    const matrixDeformation = [];
-    matrixDeformation[0] = [];
-    matrixDeformation[0][0] = matrixDistance[0][0];
-
+  calculateMatrixDeformation(matrixDeformation, matrixDistance, n, m) {
     for (let j = 1; j < m; j++) {
       matrixDeformation[j] = [];
       matrixDeformation[0][j] =
@@ -46,9 +63,10 @@ class dtwService {
           );
       }
     }
+  }
 
-    //поиск оптимального пути
-    W.push(matrixDeformation[n - 1][m - 1]);
+  searchWarpingPath(warpingPath, matrixDeformation, n, m) {
+    warpingPath.push(matrixDeformation[n - 1][m - 1]);
     let i = n - 1;
     let j = m - 1;
     do {
@@ -65,22 +83,13 @@ class dtwService {
         } else {
           j--;
         }
-      } else if (i == 0) {
+      } else if (i === 0) {
         j--;
       } else {
         i--;
       }
-      W.push(matrixDeformation[i][j]);
+      warpingPath.push(matrixDeformation[i][j]);
     } while (i != 0 && j != 0);
-
-    const distanceDWT =
-      Math.sqrt(W.reduce((sum, item) => sum + item)) / W.length;
-    console.log("расстояние DWT");
-    console.log(distanceDWT);
-    console.log("последняя координата");
-    console.log(matrixDeformation[n - 1][m - 1]);
-    if (distanceDWT > 1) return false;
-    return true;
   }
 }
 export default new dtwService();

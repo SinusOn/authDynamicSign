@@ -20,7 +20,8 @@ api.interceptors.response.use(
         setIsAuth(true);
         return api.request(origReq);
       } catch (e) {
-        console.log("Not auth инт");
+        // throw new Error("Пользователь не авторизован");
+        console.log("error");
       }
     }
     throw error;

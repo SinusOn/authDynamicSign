@@ -9,7 +9,6 @@ class TokenService {
     const refreshToken = jwt.sign(payload, process.env.REFRESH_SECRET, {
       expiresIn: "30d",
     });
-
     return { accessToken, refreshToken };
   }
   async validateAccessToken(token) {

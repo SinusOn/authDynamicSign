@@ -5,7 +5,6 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import cors from "cors";
-// import errorMiddleware from "./errorMiddleWare.js";
 dotenv.config();
 
 const app = express();
@@ -21,16 +20,13 @@ app.use(
   })
 );
 app.use("/", router);
-// app.use(errorMiddleware);
-// app.get("/", (req, res) => {
-//   res.render(`index`);
-// });
+
 async function startApp() {
   try {
     await mongoose.connect(DBURL);
     app.listen(PORT, () => console.log(`server started on ${PORT} port`));
   } catch (error) {
-    console.log("error db");
+    console.log(error);
   }
 }
 startApp();

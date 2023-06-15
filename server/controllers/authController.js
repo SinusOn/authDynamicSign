@@ -1,12 +1,10 @@
-import Role from "../models/Role.js";
-import User from "../models/User.js";
 import authService from "../service/authService.js";
 
 class authController {
   async registration(req, res) {
     try {
+      console.log("регистрация старт");
       const { name, login, password } = req.body;
-      // const tokens = await authService.registration(name, login, password);
       const userData = await authService.registration(name, login, password);
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -24,7 +22,7 @@ class authController {
   async login(req, res) {
     try {
       const { name, login, password } = req.body;
-      // const tokens = await authService.login(name, login, password);
+
       const userData = await authService.login(name, login, password);
 
       res.cookie("refreshToken", userData.refreshToken, {
@@ -47,11 +45,7 @@ class authController {
       if (!refreshToken) {
         res.json("ok");
       }
-      console.log("start refresh in controller");
-
       const userData = await authService.refresh(refreshToken);
-
-      console.log("end refresh in controller");
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
@@ -59,7 +53,6 @@ class authController {
       res.cookie("accessToken", userData.accessToken, {
         maxAge: 3600 * 1000,
       });
-
       res.status(200).json(userData);
       return;
     } catch (error) {
@@ -71,33 +64,28 @@ class authController {
       const users = await authService.users();
       res.json(users);
     } catch (error) {
-      console.log(error);
-      console.log("error in controller");
       res.status(401).json(error.message);
     }
   }
   async logout(req, res) {
     try {
       const { refreshToken } = req.cookies;
-
       await authService.logout(refreshToken);
 
-      res.clearCookie("refreshToken");
+      res.clearCookie("refreshToken", {
+        httpOnly: true,
+      });
       res.clearCookie("accessToken");
-
-      return res.json("logout end");
+      res.status(200).json("ok");
     } catch (error) {
       res.status(400).json(error.message);
     }
   }
-  // async user(req, res) {
-  //   try {
-  //   } catch (error) {}
-  // }
+
   async compareSign(req, res) {
     try {
       const { reference, input } = req.body;
-      const similarity = await authService.compareSign(reference, input);
+      await authService.compareSign(reference, input);
 
       res.status(200).json({ mess: "подписи похожи" });
     } catch (error) {
@@ -125,9 +113,7 @@ class authController {
   }
   async getRole(req, res) {
     const { user } = req.body;
-    // const role = await authService.getRole(accessToken);
-    // res.json(role);
-    console.log("user в контроллере ");
+
     res.json(user);
     try {
     } catch (error) {
